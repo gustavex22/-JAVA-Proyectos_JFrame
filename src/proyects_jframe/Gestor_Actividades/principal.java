@@ -4,6 +4,16 @@
  */
 package proyects_jframe.Gestor_Actividades;
 
+/*
+Actividades:
+-Aspecto grafico
+-Codigo:
+    -Opcion Eliminar
+    -Opcion Añadir actividad
+    -Menu para Introducir Datos
+    -Usar una lista para ver las actividades
+*/
+
 /**
  *
  * @author Iberos-HP
