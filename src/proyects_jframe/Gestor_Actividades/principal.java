@@ -4,15 +4,8 @@
  */
 package proyects_jframe.Gestor_Actividades;
 
-/*
-Actividades:
--Aspecto grafico
--Codigo:
-    -Opcion Eliminar
-    -Opcion Añadir actividad
-    -Menu para Introducir Datos
-    -Usar una lista para ver las actividades
-*/
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -26,7 +19,7 @@ public class principal extends javax.swing.JFrame {
     -Codigo:
         -Option de añadir Tarea(Terminado)
         -Option para Eliminar Tarea
-        -Usar un list para mostrar graficamente los datos
+        -Usar un list para mostrar graficamente los datos (listo)
     */
     
 
@@ -99,6 +92,11 @@ public class principal extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
 
@@ -106,6 +104,11 @@ public class principal extends javax.swing.JFrame {
 
         cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "Cancelado", "Completado", " " }));
         cmbEstado.setEnabled(false);
+        cmbEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEstadoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelDatosLayout = new javax.swing.GroupLayout(PanelDatos);
         PanelDatos.setLayout(PanelDatosLayout);
@@ -128,7 +131,6 @@ public class principal extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(33, 33, 33)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
@@ -161,15 +163,12 @@ public class principal extends javax.swing.JFrame {
             PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelDatosLayout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelDatosLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2))
-                    .addGroup(PanelDatosLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3))))
+                    .addComponent(jLabel2)
+                    .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -312,12 +311,20 @@ public class principal extends javax.swing.JFrame {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
         String Titulo,Descripcion,Estado;
-        int Orden= 0;
+         int Orden= 0;
+         int clone = 0;
         
         // Ordenando datos en variables
         Titulo = txtNombre.getText();
+        
+        if(tlbDatos.getShowHorizontalLines()){
+            clone = Orden ;
+            Orden = tlbDatos.getSelectedRow();
+        }else  {
+            Orden = Integer.parseInt(txtOrden.getText());
+        }
+        
         Descripcion = txtpDescripcion.getText();
-        Orden = Integer.parseInt(txtOrden.getText());
         Estado = cmbEstado.getSelectedItem().toString();
         
         //Introduciendo datos en la tabla
@@ -331,10 +338,50 @@ public class principal extends javax.swing.JFrame {
         txtNombre.setText("");
         txtpDescripcion.setText("");
         
-            
-        Orden++;
-        txtOrden.setText(String.valueOf(Orden));
+        if(!tlbDatos.getShowHorizontalLines()){   
+         Orden = clone ;
+         Orden++;
+         txtOrden.setText(String.valueOf(Orden));
+        } 
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        if(tlbDatos.getShowHorizontalLines()){
+            
+            // ? Ordenamos variables para mejorar la lejibilidad del codigo
+            int index = tlbDatos.getSelectedRow();
+            String Estado = tlbDatos.getValueAt(index,1).toString();
+            String Nombre= tlbDatos.getValueAt(index,2).toString();
+            String Descripcion = tlbDatos.getValueAt(index,3).toString();
+            
+            
+            // ?se Introducen los datos a su respectivo cuadro txt
+            txtOrden.setText(String.valueOf(index));
+            
+            if(Estado.equalsIgnoreCase("Pendiente")){
+                cmbEstado.setSelectedIndex(0);
+            }
+            
+            if(Estado.equalsIgnoreCase("Cancelado")){
+                cmbEstado.setSelectedIndex(1);
+            }
+            
+            if(Estado.equalsIgnoreCase("Completado")){
+                cmbEstado.setSelectedIndex(2);
+            }
+            
+            txtNombre.setText(Nombre);
+            txtpDescripcion.setText(Descripcion);
+        }else{
+            JOptionPane.showInputDialog("Seleccione una fila");
+        
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbEstadoActionPerformed
 
     /**
      * @param args the command line arguments
