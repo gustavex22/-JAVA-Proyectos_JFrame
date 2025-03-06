@@ -12,6 +12,9 @@ import javax.swing.JOptionPane;
  * @author Iberos-HP
  */
 public class principal extends javax.swing.JFrame {
+    //variable que guarda el conteo de las tareas agregadas
+   int Counter_Tareas = 0;
+   
     
     /* 
     Actividades:
@@ -311,43 +314,52 @@ public class principal extends javax.swing.JFrame {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
         String Titulo,Descripcion,Estado;
-         int Orden= 0;
-         int clone = 0;
+        int index= 0;
         
         // Ordenando datos en variables
         Titulo = txtNombre.getText();
         
-        if(tlbDatos.getShowHorizontalLines()){
-            clone = Orden ;
-            Orden = tlbDatos.getSelectedRow();
+        if(tlbDatos.getSelectedRow() != -1){
+            index = tlbDatos.getSelectedRow();
         }else  {
-            Orden = Integer.parseInt(txtOrden.getText());
+            index = Integer.parseInt(txtOrden.getText());
         }
         
         Descripcion = txtpDescripcion.getText();
         Estado = cmbEstado.getSelectedItem().toString();
         
         //Introduciendo datos en la tabla
-        tlbDatos.setValueAt(String.valueOf(Orden),Orden,0);
-        tlbDatos.setValueAt(Estado,Orden,1);
-        tlbDatos.setValueAt(Titulo,Orden,2);
-        tlbDatos.setValueAt(Descripcion,Orden,3);
+        if(!(tlbDatos.getSelectedRow() != -1)){
+            tlbDatos.setValueAt(String.valueOf(index),index,0);
+        }
+        
+        tlbDatos.setValueAt(Estado,index,1);
+        tlbDatos.setValueAt(Titulo,index,2);
+        tlbDatos.setValueAt(Descripcion,index,3);
         
         
         //Limpiando campos
         txtNombre.setText("");
         txtpDescripcion.setText("");
         
-        if(!tlbDatos.getShowHorizontalLines()){   
-         Orden = clone ;
-         Orden++;
-         txtOrden.setText(String.valueOf(Orden));
-        } 
+        
+        if(!(tlbDatos.getSelectedRow() != -1)){   
+            //se ejecuta si agregas una nueva fila
+            Counter_Tareas++;
+            
+            txtOrden.setText(String.valueOf(Counter_Tareas));
+            Counter_Tareas = Integer.valueOf(txtOrden.getText());
+            
+        } else{
+            cmbEstado.setEnabled(false);
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-        if(tlbDatos.getShowHorizontalLines()){
+        
+        // verifica si hay una fila seleccionada
+        if(tlbDatos.getSelectedRow() != -1){
             
             // ? Ordenamos variables para mejorar la lejibilidad del codigo
             int index = tlbDatos.getSelectedRow();
@@ -359,6 +371,8 @@ public class principal extends javax.swing.JFrame {
             // ?se Introducen los datos a su respectivo cuadro txt
             txtOrden.setText(String.valueOf(index));
             
+            
+            //Introduccion al cuadro de texto Estado
             if(Estado.equalsIgnoreCase("Pendiente")){
                 cmbEstado.setSelectedIndex(0);
             }
@@ -373,8 +387,11 @@ public class principal extends javax.swing.JFrame {
             
             txtNombre.setText(Nombre);
             txtpDescripcion.setText(Descripcion);
+            
+            //Se activa el cuadro de texto Estado
+            cmbEstado.setEnabled(true);
         }else{
-            JOptionPane.showInputDialog("Seleccione una fila");
+            JOptionPane.showMessageDialog(null,"Seleccione una fila");
         
         }
     }//GEN-LAST:event_btnEditarActionPerformed
