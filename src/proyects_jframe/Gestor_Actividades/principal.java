@@ -40,17 +40,21 @@ public class principal extends javax.swing.JFrame {
         setTitle("Gestor de Actividades");
         btnEditar.setVisible(false);
         //Timer se ejecuta cada 1000 ms (1 segundo)
-        Timer reloj = new Timer(500 , new ActionListener(){
+        Timer reloj = new Timer(200 , new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 //habilita el boton edit si haz seleccionado una fila
                 if(tlbDatos.getSelectedRow() != -1){
                     btnEditar.setEnabled(true);
                     cmbEstado.setEnabled(true);
+                    btnDeseleccionar.setVisible(true);
+                    Editar_Campos();
                     
                 }else{
                     btnEditar.setEnabled(false);
                     cmbEstado.setEnabled(false);
+                    btnDeseleccionar.setVisible(false);
+                    
                 }
             }
         });
@@ -84,6 +88,7 @@ public class principal extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
+        btnDeseleccionar = new javax.swing.JButton();
         PanelList = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tlbDatos = new javax.swing.JTable();
@@ -137,6 +142,13 @@ public class principal extends javax.swing.JFrame {
             }
         });
 
+        btnDeseleccionar.setText("Deseleccionar");
+        btnDeseleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeseleccionarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout PanelDatosLayout = new javax.swing.GroupLayout(PanelDatos);
         PanelDatos.setLayout(PanelDatosLayout);
         PanelDatosLayout.setHorizontalGroup(
@@ -152,7 +164,7 @@ public class principal extends javax.swing.JFrame {
                             .addGroup(PanelDatosLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)))
                         .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
@@ -174,15 +186,17 @@ public class principal extends javax.swing.JFrame {
                     .addGroup(PanelDatosLayout.createSequentialGroup()
                         .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelDatosLayout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jLabel1))
+                            .addGroup(PanelDatosLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnEditar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanelDatosLayout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addComponent(jLabel1)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDeseleccionar)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -209,7 +223,8 @@ public class principal extends javax.swing.JFrame {
                 .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeseleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45))
         );
 
@@ -278,7 +293,7 @@ public class principal extends javax.swing.JFrame {
             PanelListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelListLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
                 .addContainerGap())
         );
         PanelListLayout.setVerticalGroup(
@@ -344,6 +359,33 @@ public class principal extends javax.swing.JFrame {
         
     }
     
+    private void Editar_Campos(){
+        int index = tlbDatos.getSelectedRow();
+        txtOrden.setText(String.valueOf(index));
+        String Estado_Comparative = tlbDatos.getValueAt(index,1).toString();
+        String Nombre = tlbDatos.getValueAt(index,2).toString();
+        String Descripcion = tlbDatos.getValueAt(index,3).toString();
+        
+        txtOrden.setText(String.valueOf(index));
+        
+        if(Estado_Comparative.equalsIgnoreCase("Pendiente")){
+            cmbEstado.setSelectedIndex(0);
+        
+        }
+        if(Estado_Comparative.equalsIgnoreCase("Cancelado")){
+            cmbEstado.setSelectedIndex(1);
+        
+        }
+        if(Estado_Comparative.equalsIgnoreCase("Completado")){
+            cmbEstado.setSelectedIndex(2);
+        
+        }
+        
+        txtNombre.setText(Nombre);
+        txtpDescripcion.setText(Descripcion);
+    }
+    
+    
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         //Acomodando  y ordenando variables
         int index = 0;
@@ -385,6 +427,15 @@ public class principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbEstadoActionPerformed
 
+    private void btnDeseleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeseleccionarActionPerformed
+        // TODO add your handling code here:
+        tlbDatos.clearSelection();
+        txtOrden.setText(String.valueOf(Counter_Tareas));
+        txtNombre.setText("");
+        txtpDescripcion.setText("");
+        cmbEstado.setSelectedIndex(0);
+    }//GEN-LAST:event_btnDeseleccionarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -425,6 +476,7 @@ public class principal extends javax.swing.JFrame {
     private javax.swing.JPanel PanelGeneral;
     private javax.swing.JPanel PanelList;
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnDeseleccionar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<String> cmbEstado;
