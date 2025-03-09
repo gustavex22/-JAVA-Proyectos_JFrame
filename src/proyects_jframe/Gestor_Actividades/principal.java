@@ -4,7 +4,11 @@
  */
 package proyects_jframe.Gestor_Actividades;
 
-import javax.swing.JOptionPane;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashSet;
+import javax.swing.*;
 
 
 /**
@@ -34,6 +38,25 @@ public class principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("Gestor de Actividades");
+        btnEditar.setVisible(false);
+        //Timer se ejecuta cada 1000 ms (1 segundo)
+        Timer reloj = new Timer(500 , new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                //habilita el boton edit si haz seleccionado una fila
+                if(tlbDatos.getSelectedRow() != -1){
+                    btnEditar.setEnabled(true);
+                    cmbEstado.setEnabled(true);
+                    
+                }else{
+                    btnEditar.setEnabled(false);
+                    cmbEstado.setEnabled(false);
+                }
+            }
+        });
+        //inicia el timer
+          reloj.start();
+          
         
     }
 
@@ -95,6 +118,7 @@ public class principal extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
@@ -311,89 +335,50 @@ public class principal extends javax.swing.JFrame {
 
     
     
+    private void Añadir_o_Reemplazar_datos(int index,String Estado,String Nombre,String Descripcion){
+        //Introduciendo Datos
+        tlbDatos.setValueAt(index, index, 0);
+        tlbDatos.setValueAt(Estado, index, 1);
+        tlbDatos.setValueAt(Nombre, index, 2);
+        tlbDatos.setValueAt(Descripcion, index, 3);
+        
+    }
+    
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
-        String Titulo,Descripcion,Estado;
-        int index= 0;
+        //Acomodando  y ordenando variables
+        int index = 0;
         
-        // Ordenando datos en variables
-        Titulo = txtNombre.getText();
-        
-        if(tlbDatos.getSelectedRow() != -1){
-            index = tlbDatos.getSelectedRow();
-        }else  {
-            index = Integer.parseInt(txtOrden.getText());
+        //determina si el boton editar esta habilitado
+        if(btnEditar.isEnabled()){
+            //Se ejecuta solo al editar
+            index =  tlbDatos.getValueAt(tlbDatos.getSelectedRow(), 0).hashCode();
+        }else{
+           index = Counter_Tareas;
         }
         
-        Descripcion = txtpDescripcion.getText();
-        Estado = cmbEstado.getSelectedItem().toString();
+        String Estado = cmbEstado.getSelectedItem().toString();
+        String Nombre = txtNombre.getText();
+        String Descripcion = txtpDescripcion.getText();
         
-        //Introduciendo datos en la tabla
-        if(!(tlbDatos.getSelectedRow() != -1)){
-            tlbDatos.setValueAt(String.valueOf(index),index,0);
+        //Llamar funcion
+        Añadir_o_Reemplazar_datos(index,Estado,Nombre,Descripcion);
+        
+        if(btnEditar.isEnabled()){
+            Counter_Tareas++;
+            txtOrden.setText(String.valueOf(Counter_Tareas));
         }
         
-        tlbDatos.setValueAt(Estado,index,1);
-        tlbDatos.setValueAt(Titulo,index,2);
-        tlbDatos.setValueAt(Descripcion,index,3);
-        
-        
-        //Limpiando campos
+        //Limpiar Campos
         txtNombre.setText("");
         txtpDescripcion.setText("");
+        cmbEstado.setSelectedIndex(0);
         
         
-        if(!(tlbDatos.getSelectedRow() != -1)){   
-            //se ejecuta si agregas una nueva fila
-            Counter_Tareas++;
-            
-            txtOrden.setText(String.valueOf(Counter_Tareas));
-            Counter_Tareas = Integer.valueOf(txtOrden.getText());
-            
-        } else{
-            cmbEstado.setEnabled(false);
-        }
+        tlbDatos.clearSelection();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
-        
-        // verifica si hay una fila seleccionada
-        if(tlbDatos.getSelectedRow() != -1){
-            
-            // ? Ordenamos variables para mejorar la lejibilidad del codigo
-            int index = tlbDatos.getSelectedRow();
-            String Estado = tlbDatos.getValueAt(index,1).toString();
-            String Nombre= tlbDatos.getValueAt(index,2).toString();
-            String Descripcion = tlbDatos.getValueAt(index,3).toString();
-            
-            
-            // ?se Introducen los datos a su respectivo cuadro txt
-            txtOrden.setText(String.valueOf(index));
-            
-            
-            //Introduccion al cuadro de texto Estado
-            if(Estado.equalsIgnoreCase("Pendiente")){
-                cmbEstado.setSelectedIndex(0);
-            }
-            
-            if(Estado.equalsIgnoreCase("Cancelado")){
-                cmbEstado.setSelectedIndex(1);
-            }
-            
-            if(Estado.equalsIgnoreCase("Completado")){
-                cmbEstado.setSelectedIndex(2);
-            }
-            
-            txtNombre.setText(Nombre);
-            txtpDescripcion.setText(Descripcion);
-            
-            //Se activa el cuadro de texto Estado
-            cmbEstado.setEnabled(true);
-        }else{
-            JOptionPane.showMessageDialog(null,"Seleccione una fila");
-        
-        }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
