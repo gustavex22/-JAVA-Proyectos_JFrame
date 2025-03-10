@@ -34,10 +34,10 @@ public class principal extends javax.swing.JFrame {
     
     /* 
     Actividades:
-    -Aspecto Grafico(Posibles Cambios)
+    -Aspecto Grafico(terminado)
     -Codigo:
         -Option de añadir Tarea(Terminado)
-        -Option para Eliminar Tarea
+        -Option para Eliminar Tarea(Terminado)
         -Usar un list para mostrar graficamente los datos (listo)
     */
     
@@ -58,31 +58,37 @@ public class principal extends javax.swing.JFrame {
         
         //Timer se ejecuta cada 1000 ms (1 segundo)
       
-        
-        Timer reloj = new Timer(200 , new ActionListener(){
+        Timer reloj = new Timer(20 , new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                
+        
                 //habilita el boton edit si haz seleccionado una fila
-                if(tlbDatos.getSelectedRow() != -1){//se ejecuta cuando se selecciona una fila
+                if(tlbDatos.getSelectedRow() != -1 ){//se ejecuta cuando se selecciona una fila y la fila esta vacia
+                   boolean estado;
+                    estado = fila_vacia();
+                    
                     btnEditar.setEnabled(true);
                     cmbEstado.setEnabled(true);
-                     Editar_Campos();
                     btnDeseleccionar.setVisible(true);
                     btnEliminar.setVisible(true);
+                    btnAgregar.setText("Editar");
                     
+                    if(estado){
+                        JOptionPane.showMessageDialog(null,"Error :No se puede editar una fila vacia");
+                        tlbDatos.clearSelection();
+                        return;
+                    }
+                    Editar_Campos();
                     
-                    
-                    
-                }else{//se ejecuta cuando no se selecciona una fila
-                    btnEditar.setEnabled(false);
+                }else{//se ejecuta en caso contrario
+                 
+                    btnEditar.setEnabled(false);  //btnEditar se usa como referencia para usarlo en el codigo
                     cmbEstado.setEnabled(false);
+                    btnAgregar.setText("Agregar");
                     btnDeseleccionar.setVisible(false);
                     btnEliminar.setVisible(false);
                     Counter_General[1] = 0;
-                    
-                  
-                    
+                     
                 }
             }
         });
@@ -357,6 +363,9 @@ public class principal extends javax.swing.JFrame {
     
     
     private void Añadir_o_Reemplazar_datos(int index,String Estado,String Nombre,String Descripcion){
+        //fila vacia
+        modelo.addRow(new Object[4]);
+        
         //Introduciendo Datos
         modelo.setValueAt(index, index, 0);
         modelo.setValueAt(Estado, index, 1);
@@ -368,36 +377,48 @@ public class principal extends javax.swing.JFrame {
         tlbDatos.setModel(modelo);
     }
     
+    
+    private boolean fila_vacia(){
+        boolean fila_vacia;
+        int index = tlbDatos.getSelectedRow();
+        
+        Object Nombre = tlbDatos.getValueAt(index,0);
+        fila_vacia = Nombre == null;
+        return fila_vacia;
+    }
+    
     private void Editar_Campos(){
         int index = tlbDatos.getSelectedRow();
          
-        if(Counter_General[1] == 0 || index == index ){
-           
-            txtOrden.setText(String.valueOf(index));
-            String Estado_Comparative = tlbDatos.getValueAt(index,1).toString();
-            String Nombre = tlbDatos.getValueAt(index,2).toString();
-            String Descripcion = tlbDatos.getValueAt(index,3).toString();
+        if(index == index){
+            if(Counter_General[1] == 0 ){
+                
 
-            txtOrden.setText(String.valueOf(index));
+                txtOrden.setText(String.valueOf(index));
+                String Estado_Comparative = tlbDatos.getValueAt(index,1).toString();
+                String Nombre = tlbDatos.getValueAt(index,2).toString();
+                String Descripcion = tlbDatos.getValueAt(index,3).toString();
 
-            if(Estado_Comparative.equalsIgnoreCase("Pendiente")){
-                cmbEstado.setSelectedIndex(0);
+                txtOrden.setText(String.valueOf(index));
 
-            }
-            if(Estado_Comparative.equalsIgnoreCase("Cancelado")){
-                cmbEstado.setSelectedIndex(1);
+                if(Estado_Comparative.equalsIgnoreCase("Pendiente")){
+                    cmbEstado.setSelectedIndex(0);
 
-            }
-            if(Estado_Comparative.equalsIgnoreCase("Completado")){
-                cmbEstado.setSelectedIndex(2);
+                }
+                if(Estado_Comparative.equalsIgnoreCase("Cancelado")){
+                    cmbEstado.setSelectedIndex(1);
 
-            }
+                }
+                if(Estado_Comparative.equalsIgnoreCase("Completado")){
+                    cmbEstado.setSelectedIndex(2);
 
-            txtNombre.setText(Nombre);
-            txtpDescripcion.setText(Descripcion);
-            }
+                }
 
-            Counter_General[1]++;
+                txtNombre.setText(Nombre);
+                txtpDescripcion.setText(Descripcion);
+                Counter_General[1]++;
+                }
+        }
     }
     
     private void Limpiar_Campos(){
@@ -434,6 +455,7 @@ public class principal extends javax.swing.JFrame {
         
         //comprueba que los campos no esten vacios
         if(!Nombre.equalsIgnoreCase("") || !Descripcion.equalsIgnoreCase("")){
+            
             //Llamar funcion
             Añadir_o_Reemplazar_datos(index,Estado,Nombre,Descripcion);
 
@@ -469,18 +491,21 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeseleccionarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:      
+        // TODO add your handling code here:   
+        
+         //guardar el index de la fila seleccionada
          int index = tlbDatos.getSelectedRow();
          
          //restar counter de tareas
          Counter_General[0]--;
          
          //Limpiar Campos
-        Limpiar_Campos();
+         Limpiar_Campos();
         
         //Actualizar modelo de tabla
          modelo = (DefaultTableModel) tlbDatos.getModel();
          modelo.removeRow(index);
+         tlbDatos.setModel(modelo);
          
     }//GEN-LAST:event_btnEliminarActionPerformed
 
