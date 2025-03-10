@@ -16,8 +16,11 @@ import javax.swing.*;
  * @author Iberos-HP
  */
 public class principal extends javax.swing.JFrame {
+    DefaultTableModel modelo ;
     
-    DefaultTableModel modelo = new DefaultTableModel();
+     
+    
+    
     
     //variable que guarda el conteo de las tareas agregadas
     
@@ -48,7 +51,8 @@ public class principal extends javax.swing.JFrame {
         setResizable(false);
         setTitle("Gestor de Actividades");
         btnEditar.setVisible(false);
-        tlbDatos  = new JTable(modelo);
+        
+        
        
         
         
@@ -381,11 +385,14 @@ public class principal extends javax.swing.JFrame {
     
     private void Añadir_o_Reemplazar_datos(int index,String Estado,String Nombre,String Descripcion){
         //Introduciendo Datos
-        tlbDatos.setValueAt(index, index, 0);
-        tlbDatos.setValueAt(Estado, index, 1);
-        tlbDatos.setValueAt(Nombre, index, 2);
-        tlbDatos.setValueAt(Descripcion, index, 3);
+        modelo.setValueAt(index, index, 0);
+        modelo.setValueAt(Estado, index, 1);
+        modelo.setValueAt(Nombre, index, 2);
+        modelo.setValueAt(Descripcion, index, 3);
         
+        //Actualizar modelo de tabla
+        modelo = (DefaultTableModel) tlbDatos.getModel();
+        tlbDatos.setModel(modelo);
     }
     
     private void Editar_Campos(){
@@ -419,8 +426,20 @@ public class principal extends javax.swing.JFrame {
         Counter_General[1]++;
     }
     
+    private void Limpiar_Campos(){
+        //Limpiar Campos
+        txtOrden.setText(String.valueOf(Counter_General[0]));
+        txtNombre.setText("");
+        txtpDescripcion.setText("");
+        cmbEstado.setSelectedIndex(0);
+        tlbDatos.clearSelection();
+    
+    }
+    
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        //Obteniendo modelo de la tabla
+        modelo = (DefaultTableModel) tlbDatos.getModel();
         //Acomodando  y ordenando variables
         int index = 0;
         
@@ -442,15 +461,14 @@ public class principal extends javax.swing.JFrame {
         if(!btnEditar.isEnabled()){
             Counter_General[0]++;
         }
-        txtOrden.setText(String.valueOf(Counter_General[0]));
-        
-        //Limpiar Campos
-        txtNombre.setText("");
-        txtpDescripcion.setText("");
-        cmbEstado.setSelectedIndex(0);
+         
+        //Limpiando campos
+        Limpiar_Campos();
         
         
-        tlbDatos.clearSelection();
+       //Actualizar modelo de tabla
+        modelo = (DefaultTableModel) tlbDatos.getModel();
+        tlbDatos.setModel(modelo);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -463,19 +481,24 @@ public class principal extends javax.swing.JFrame {
 
     private void btnDeseleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeseleccionarActionPerformed
         // TODO add your handling code here:
-        tlbDatos.clearSelection();
-        txtOrden.setText(String.valueOf(Counter_General[0]));
-        txtNombre.setText("");
-        txtpDescripcion.setText("");
-        cmbEstado.setSelectedIndex(0);
+        Limpiar_Campos();
     }//GEN-LAST:event_btnDeseleccionarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:      
          int index = tlbDatos.getSelectedRow();
-        modelo.removeRow(index);
-        Counter_General[0]--;
+         
+         //restar counter de tareas
+         Counter_General[0]--;
+         
+         //Limpiar Campos
+        Limpiar_Campos();
         
+        //Actualizar modelo de tabla
+         modelo = (DefaultTableModel) tlbDatos.getModel();
+         modelo.removeRow(index);
+         
+         
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
