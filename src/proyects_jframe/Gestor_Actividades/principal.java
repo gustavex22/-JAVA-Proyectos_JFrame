@@ -266,33 +266,6 @@ public class principal extends javax.swing.JFrame {
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
@@ -396,34 +369,35 @@ public class principal extends javax.swing.JFrame {
     }
     
     private void Editar_Campos(){
-        
-        if(Counter_General[1] == 0){
         int index = tlbDatos.getSelectedRow();
-        txtOrden.setText(String.valueOf(index));
-        String Estado_Comparative = tlbDatos.getValueAt(index,1).toString();
-        String Nombre = tlbDatos.getValueAt(index,2).toString();
-        String Descripcion = tlbDatos.getValueAt(index,3).toString();
-        
-        txtOrden.setText(String.valueOf(index));
-        
-        if(Estado_Comparative.equalsIgnoreCase("Pendiente")){
-            cmbEstado.setSelectedIndex(0);
-        
-        }
-        if(Estado_Comparative.equalsIgnoreCase("Cancelado")){
-            cmbEstado.setSelectedIndex(1);
-        
-        }
-        if(Estado_Comparative.equalsIgnoreCase("Completado")){
-            cmbEstado.setSelectedIndex(2);
-        
-        }
-        
-        txtNombre.setText(Nombre);
-        txtpDescripcion.setText(Descripcion);
-        }
-        
-        Counter_General[1]++;
+         
+        if(Counter_General[1] == 0 || index == index ){
+           
+            txtOrden.setText(String.valueOf(index));
+            String Estado_Comparative = tlbDatos.getValueAt(index,1).toString();
+            String Nombre = tlbDatos.getValueAt(index,2).toString();
+            String Descripcion = tlbDatos.getValueAt(index,3).toString();
+
+            txtOrden.setText(String.valueOf(index));
+
+            if(Estado_Comparative.equalsIgnoreCase("Pendiente")){
+                cmbEstado.setSelectedIndex(0);
+
+            }
+            if(Estado_Comparative.equalsIgnoreCase("Cancelado")){
+                cmbEstado.setSelectedIndex(1);
+
+            }
+            if(Estado_Comparative.equalsIgnoreCase("Completado")){
+                cmbEstado.setSelectedIndex(2);
+
+            }
+
+            txtNombre.setText(Nombre);
+            txtpDescripcion.setText(Descripcion);
+            }
+
+            Counter_General[1]++;
     }
     
     private void Limpiar_Campos(){
@@ -497,7 +471,6 @@ public class principal extends javax.swing.JFrame {
         //Actualizar modelo de tabla
          modelo = (DefaultTableModel) tlbDatos.getModel();
          modelo.removeRow(index);
-         
          
     }//GEN-LAST:event_btnEliminarActionPerformed
 
