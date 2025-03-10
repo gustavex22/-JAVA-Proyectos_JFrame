@@ -7,7 +7,7 @@ package proyects_jframe.Gestor_Actividades;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashSet;
+import javax.swing.table.*;
 import javax.swing.*;
 
 
@@ -16,8 +16,17 @@ import javax.swing.*;
  * @author Iberos-HP
  */
 public class principal extends javax.swing.JFrame {
+    
+    DefaultTableModel modelo = new DefaultTableModel();
+    
     //variable que guarda el conteo de las tareas agregadas
-   int Counter_Tareas = 0;
+    
+    //esta variable agrupa todo los counters Usados en un arreglo
+         int [] Counter_General =new int[]{ 0,0};
+         //counter_general [0] counter para el numero de tareas
+         //counter_general[1] counter para la funcion editar
+         
+   
    
     
     /* 
@@ -39,21 +48,36 @@ public class principal extends javax.swing.JFrame {
         setResizable(false);
         setTitle("Gestor de Actividades");
         btnEditar.setVisible(false);
+        tlbDatos  = new JTable(modelo);
+       
+        
+        
         //Timer se ejecuta cada 1000 ms (1 segundo)
+      
+        
         Timer reloj = new Timer(200 , new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+                
                 //habilita el boton edit si haz seleccionado una fila
-                if(tlbDatos.getSelectedRow() != -1){
+                if(tlbDatos.getSelectedRow() != -1){//se ejecuta cuando se selecciona una fila
                     btnEditar.setEnabled(true);
                     cmbEstado.setEnabled(true);
+                     Editar_Campos();
                     btnDeseleccionar.setVisible(true);
-                    Editar_Campos();
+                    btnEliminar.setVisible(true);
                     
-                }else{
+                    
+                    
+                    
+                }else{//se ejecuta cuando no se selecciona una fila
                     btnEditar.setEnabled(false);
                     cmbEstado.setEnabled(false);
                     btnDeseleccionar.setVisible(false);
+                    btnEliminar.setVisible(false);
+                    Counter_General[1] = 0;
+                    
+                  
                     
                 }
             }
@@ -131,6 +155,11 @@ public class principal extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Estado");
 
@@ -360,6 +389,8 @@ public class principal extends javax.swing.JFrame {
     }
     
     private void Editar_Campos(){
+        
+        if(Counter_General[1] == 0){
         int index = tlbDatos.getSelectedRow();
         txtOrden.setText(String.valueOf(index));
         String Estado_Comparative = tlbDatos.getValueAt(index,1).toString();
@@ -383,6 +414,9 @@ public class principal extends javax.swing.JFrame {
         
         txtNombre.setText(Nombre);
         txtpDescripcion.setText(Descripcion);
+        }
+        
+        Counter_General[1]++;
     }
     
     
@@ -395,7 +429,7 @@ public class principal extends javax.swing.JFrame {
             //Se ejecuta solo al editar
             index =  tlbDatos.getValueAt(tlbDatos.getSelectedRow(), 0).hashCode();
         }else{
-           index = Counter_Tareas;
+           index = Counter_General [0];
         }
         
         String Estado = cmbEstado.getSelectedItem().toString();
@@ -405,10 +439,10 @@ public class principal extends javax.swing.JFrame {
         //Llamar funcion
         Añadir_o_Reemplazar_datos(index,Estado,Nombre,Descripcion);
         
-        if(btnEditar.isEnabled()){
-            Counter_Tareas++;
-            txtOrden.setText(String.valueOf(Counter_Tareas));
+        if(!btnEditar.isEnabled()){
+            Counter_General[0]++;
         }
+        txtOrden.setText(String.valueOf(Counter_General[0]));
         
         //Limpiar Campos
         txtNombre.setText("");
@@ -430,11 +464,19 @@ public class principal extends javax.swing.JFrame {
     private void btnDeseleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeseleccionarActionPerformed
         // TODO add your handling code here:
         tlbDatos.clearSelection();
-        txtOrden.setText(String.valueOf(Counter_Tareas));
+        txtOrden.setText(String.valueOf(Counter_General[0]));
         txtNombre.setText("");
         txtpDescripcion.setText("");
         cmbEstado.setSelectedIndex(0);
     }//GEN-LAST:event_btnDeseleccionarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+         int index = tlbDatos.getSelectedRow();
+        modelo.removeRow(index);
+        Counter_General[0]--;
+        
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
