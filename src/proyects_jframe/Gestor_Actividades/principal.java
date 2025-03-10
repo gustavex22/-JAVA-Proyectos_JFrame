@@ -429,20 +429,30 @@ public class principal extends javax.swing.JFrame {
         String Nombre = txtNombre.getText();
         String Descripcion = txtpDescripcion.getText();
         
-        //Llamar funcion
-        Añadir_o_Reemplazar_datos(index,Estado,Nombre,Descripcion);
         
-        if(!btnEditar.isEnabled()){
-            Counter_General[0]++;
+        //Comprobar campos
+        
+        //comprueba que los campos no esten vacios
+        if(!Nombre.equalsIgnoreCase("") || !Descripcion.equalsIgnoreCase("")){
+            //Llamar funcion
+            Añadir_o_Reemplazar_datos(index,Estado,Nombre,Descripcion);
+
+            if(!btnEditar.isEnabled()){
+                Counter_General[0]++;
+            }
+
+            //Limpiando campos
+            Limpiar_Campos();
+
+
+           //Actualizar modelo de tabla
+            modelo = (DefaultTableModel) tlbDatos.getModel();
+            tlbDatos.setModel(modelo);
+        }else{
+            JOptionPane.showMessageDialog(null, "Por Favor rellene los campos");
+            return;
         }
-         
-        //Limpiando campos
-        Limpiar_Campos();
         
-        
-       //Actualizar modelo de tabla
-        modelo = (DefaultTableModel) tlbDatos.getModel();
-        tlbDatos.setModel(modelo);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
