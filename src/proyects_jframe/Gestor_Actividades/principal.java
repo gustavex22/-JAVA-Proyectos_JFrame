@@ -76,6 +76,7 @@ public class principal extends javax.swing.JFrame {
                     if(estado){
                         JOptionPane.showMessageDialog(null,"Error :No se puede editar una fila vacia");
                         tlbDatos.clearSelection();
+                        Limpiar_Campos();
                         return;
                     }
                     Editar_Campos();
