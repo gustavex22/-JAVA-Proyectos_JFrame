@@ -48,33 +48,8 @@ public class principal extends javax.swing.JFrame {
         
         
         //Timer se ejecuta cada 20 ms (0,20 segundo)
+        Timer_Ejecucion();
 
-        Timer reloj = new Timer(20 , new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                Filaseleccionada = tlbDatos.getSelectedRow() != -1; //? comparacion si indica si haz seleccionado una fila o no
-                
-                if(Filaseleccionada){
-                    
-                    //!se ejecuta cuando se selecciona una fila y la fila esta vacia
-                    Modo_Editar(true);
-
-                    Comprobar_fila_vacia();
-                    
-                    Editar_Campos();
-                    
-                }else{
-                    //!se ejecuta en caso contrario
-                    Modo_Editar(false);
-                    //*se resetea el counter de la funcion editar */
-                    Counter_General[1] = 0;
-                }
-            }
-        });
-        //*inicia el timer
-        reloj.start();
-        
-        
     }
 
     /**
@@ -343,6 +318,32 @@ public class principal extends javax.swing.JFrame {
         modelo = (DefaultTableModel) tlbDatos.getModel();
         tlbDatos.setModel(modelo);
     }
+
+    public void Timer_Ejecucion(){
+        //? Se Ejecuta cada 20ms
+        Timer reloj = new Timer(20 , new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Filaseleccionada = tlbDatos.getSelectedRow() != -1; //? comparacion si indica si haz seleccionado una fila o no
+                
+                if(Filaseleccionada){
+                    
+                    //!se ejecuta cuando se selecciona una fila y la fila esta vacia
+                    Modo_Editar(true);
+
+                    Comprobar_fila_vacia();
+
+                }else{
+                    //!se ejecuta en caso contrario
+                    Modo_Editar(false);
+                    //*se resetea el counter de la funcion editar 
+                    Counter_General[1] = 0;
+                }
+            }
+        });
+        //*inicia el timer
+        reloj.start();
+    }
     
     
     private void Modo_Editar(boolean estado){
@@ -364,22 +365,24 @@ public class principal extends javax.swing.JFrame {
         Object Nombre = tlbDatos.getValueAt(index,0);
         fila_vacia = Nombre == null;
 
-        if(fila_vacia){
+        if(fila_vacia){//?solo se ejecuta si la fila esta vacia
+            //! limpia los campos apaga el modo editar t termina la ejecuacion de la funcion
             JOptionPane.showMessageDialog(null,"Error :No se puede editar una fila vacia");
-            tlbDatos.clearSelection();
             Limpiar_Campos();
             Modo_Editar(false);
             return;
+        }else{
+            Editar_Campos(index);
         }
     }
     
-    private void Editar_Campos(){
-        int index = tlbDatos.getSelectedRow();
+    private void Editar_Campos(int index){
         
 
-        
+            //? se ejecuta solo si el counter de editar es 0
+            //! si es cero significa que no se a ejecutado y el counter esta limitado a 1 asi que solo se ejecuta una vez
             if(Counter_General[1] == 0 ){
-                
+                //? se encarga de rellenar los campos con los datos segun la lista
 
                 txtOrden.setText(String.valueOf(index));
                 String Estado_Comparative = tlbDatos.getValueAt(index,1).toString();
@@ -388,17 +391,17 @@ public class principal extends javax.swing.JFrame {
 
                 txtOrden.setText(String.valueOf(index));
 
-                if(Estado_Comparative.equalsIgnoreCase("Pendiente")){
-                    cmbEstado.setSelectedIndex(0);
 
-                }
-                if(Estado_Comparative.equalsIgnoreCase("Cancelado")){
-                    cmbEstado.setSelectedIndex(1);
-
-                }
-                if(Estado_Comparative.equalsIgnoreCase("Completado")){
-                    cmbEstado.setSelectedIndex(2);
-
+                switch(Estado_Comparative){
+                    case "Pendiente":
+                        cmbEstado.setSelectedIndex(0);
+                        break;
+                    case "Cancelado":
+                        cmbEstado.setSelectedIndex(1);
+                        break;
+                    case "Completado":
+                        cmbEstado.setSelectedIndex(2);
+                        break;
                 }
 
                 txtNombre.setText(Nombre);
@@ -411,12 +414,8 @@ public class principal extends javax.swing.JFrame {
     private void Limpiar_Campos(){
         //Limpiar Campos
         int N_tareas =Counter_General[0];
-        if(!(N_tareas == -1)){
-            txtOrden.setText(String.valueOf(N_tareas));
-        }else{
-            txtOrden.setText("0");
-        }
-        
+
+        txtOrden.setText(String.valueOf(N_tareas));
 
         txtNombre.setText("");
         txtpDescripcion.setText("");
@@ -430,9 +429,8 @@ public class principal extends javax.swing.JFrame {
         //Obteniendo modelo de la tabla
         modelo = (DefaultTableModel) tlbDatos.getModel();
         //Acomodando  y ordenando variables
-        int index = 0;
+        int index ;
 
-        
         if(Filaseleccionada){//*se ejecuta solo si una fila esta seleccionada
             index =  tlbDatos.getValueAt(tlbDatos.getSelectedRow(), 0).hashCode();
         }else{
@@ -446,13 +444,13 @@ public class principal extends javax.swing.JFrame {
         
         //Comprobar campos
         
-        //comprueba que los campos no esten vacios
-        if(!Nombre.equalsIgnoreCase("") || !Descripcion.equalsIgnoreCase("")){
+        //*comprueba que los campos no esten vacios
+        if(!(Nombre.equals("") || Descripcion.equals(""))){
             
             //Llamar funcion
             Añadir_o_Reemplazar_datos(index,Estado,Nombre,Descripcion);
 
-            if(!Filaseleccionada){
+            if(!Filaseleccionada){//? se ejecuta solo si se trabaja con el counter de tareas
                 Counter_General[0]++;
             }
 
