@@ -7,32 +7,12 @@ package proyects_jframe.Gestor_Actividades;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.table.*;
-import javax.swing.*;
 
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Iberos-HP
- */
-public class principal extends javax.swing.JFrame {
-    DefaultTableModel modelo ;
-    
-     
-    
-    
-    
-    //variable que guarda el conteo de las tareas agregadas
-    
-    //esta variable agrupa todo los counters Usados en un arreglo
-         int [] Counter_General =new int[]{ 0,0};
-         //counter_general [0] counter para el numero de tareas
-         //counter_general[1] counter para la funcion editar
-         
-   
-   
-    
-    /* 
+    /*
     Actividades:
     -Aspecto Grafico(terminado)
     -Codigo:
@@ -40,7 +20,22 @@ public class principal extends javax.swing.JFrame {
         -Option para Eliminar Tarea(Terminado)
         -Usar un list para mostrar graficamente los datos (listo)
     */
+
+/**
+ *
+ * @author Iberos-HP
+ */
+public class principal extends javax.swing.JFrame {
+    DefaultTableModel modelo ;
+    public boolean Filaseleccionada ;
+
+
+    //*variable que guarda el conteo de las tareas agregadas
     
+    //*esta variable agrupa todo los counters Usados en un arreglo
+        int [] Counter_General =new int[]{ 0,0};
+         //*counter_general [0] counter para el numero de tareas
+         //*counter_general[1] counter para la funcion editar
 
     /**
      * Creates new form principal
@@ -50,52 +45,35 @@ public class principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("Gestor de Actividades");
-        btnEditar.setVisible(false);
         
         
-       
-        
-        
-        //Timer se ejecuta cada 1000 ms (1 segundo)
-      
+        //Timer se ejecuta cada 20 ms (0,20 segundo)
+
         Timer reloj = new Timer(20 , new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-        
-                //habilita el boton edit si haz seleccionado una fila
-                if(tlbDatos.getSelectedRow() != -1 ){//se ejecuta cuando se selecciona una fila y la fila esta vacia
-                   boolean estado;
-                    estado = fila_vacia();
+                Filaseleccionada = tlbDatos.getSelectedRow() != -1; //? comparacion si indica si haz seleccionado una fila o no
+                
+                if(Filaseleccionada){
                     
-                    btnEditar.setEnabled(true);
-                    cmbEstado.setEnabled(true);
-                    btnDeseleccionar.setVisible(true);
-                    btnEliminar.setVisible(true);
-                    btnAgregar.setText("Editar");
+                    //!se ejecuta cuando se selecciona una fila y la fila esta vacia
+                    Modo_Editar(true);
+
+                    Comprobar_fila_vacia();
                     
-                    if(estado){
-                        JOptionPane.showMessageDialog(null,"Error :No se puede editar una fila vacia");
-                        tlbDatos.clearSelection();
-                        Limpiar_Campos();
-                        return;
-                    }
                     Editar_Campos();
                     
-                }else{//se ejecuta en caso contrario
-                 
-                    btnEditar.setEnabled(false);  //btnEditar se usa como referencia para usarlo en el codigo
-                    cmbEstado.setEnabled(false);
-                    btnAgregar.setText("Agregar");
-                    btnDeseleccionar.setVisible(false);
-                    btnEliminar.setVisible(false);
+                }else{
+                    //!se ejecuta en caso contrario
+                    Modo_Editar(false);
+                    //*se resetea el counter de la funcion editar */
                     Counter_General[1] = 0;
-                     
                 }
             }
         });
-        //inicia el timer
-          reloj.start();
-          
+        //*inicia el timer
+        reloj.start();
+        
         
     }
 
@@ -119,7 +97,6 @@ public class principal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtpDescripcion = new javax.swing.JTextArea();
         btnAgregar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
@@ -154,14 +131,6 @@ public class principal extends javax.swing.JFrame {
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
-            }
-        });
-
-        btnEditar.setText("Editar");
-        btnEditar.setEnabled(false);
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
             }
         });
 
@@ -231,9 +200,7 @@ public class principal extends javax.swing.JFrame {
                             .addGroup(PanelDatosLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(22, 22, 22)
                                 .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnDeseleccionar)))
@@ -259,10 +226,9 @@ public class principal extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeseleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45))
@@ -379,19 +345,39 @@ public class principal extends javax.swing.JFrame {
     }
     
     
-    private boolean fila_vacia(){
+    private void Modo_Editar(boolean estado){
+        
+        cmbEstado.setEnabled(estado);
+        btnDeseleccionar.setVisible(estado);
+        btnEliminar.setVisible(estado);
+
+        if(estado){
+            btnAgregar.setText("Editar");
+        }else{
+            btnAgregar.setText("Agregar");
+        }
+    }
+    
+    private void Comprobar_fila_vacia(){
         boolean fila_vacia;
         int index = tlbDatos.getSelectedRow();
-        
         Object Nombre = tlbDatos.getValueAt(index,0);
         fila_vacia = Nombre == null;
-        return fila_vacia;
+
+        if(fila_vacia){
+            JOptionPane.showMessageDialog(null,"Error :No se puede editar una fila vacia");
+            tlbDatos.clearSelection();
+            Limpiar_Campos();
+            Modo_Editar(false);
+            return;
+        }
     }
     
     private void Editar_Campos(){
         int index = tlbDatos.getSelectedRow();
-         
-        if(index == index){
+        
+
+        
             if(Counter_General[1] == 0 ){
                 
 
@@ -419,12 +405,19 @@ public class principal extends javax.swing.JFrame {
                 txtpDescripcion.setText(Descripcion);
                 Counter_General[1]++;
                 }
-        }
+        
     }
     
     private void Limpiar_Campos(){
         //Limpiar Campos
-        txtOrden.setText(String.valueOf(Counter_General[0]));
+        int N_tareas =Counter_General[0];
+        if(!(N_tareas == -1)){
+            txtOrden.setText(String.valueOf(N_tareas));
+        }else{
+            txtOrden.setText("0");
+        }
+        
+
         txtNombre.setText("");
         txtpDescripcion.setText("");
         cmbEstado.setSelectedIndex(0);
@@ -438,13 +431,12 @@ public class principal extends javax.swing.JFrame {
         modelo = (DefaultTableModel) tlbDatos.getModel();
         //Acomodando  y ordenando variables
         int index = 0;
+
         
-        //determina si el boton editar esta habilitado
-        if(btnEditar.isEnabled()){
-            //Se ejecuta solo al editar
+        if(Filaseleccionada){//*se ejecuta solo si una fila esta seleccionada
             index =  tlbDatos.getValueAt(tlbDatos.getSelectedRow(), 0).hashCode();
         }else{
-           index = Counter_General [0];
+            index = Counter_General [0];
         }
         
         String Estado = cmbEstado.getSelectedItem().toString();
@@ -460,7 +452,7 @@ public class principal extends javax.swing.JFrame {
             //Llamar funcion
             Añadir_o_Reemplazar_datos(index,Estado,Nombre,Descripcion);
 
-            if(!btnEditar.isEnabled()){
+            if(!Filaseleccionada){
                 Counter_General[0]++;
             }
 
@@ -478,10 +470,6 @@ public class principal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-
-    }//GEN-LAST:event_btnEditarActionPerformed
-
     private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbEstadoActionPerformed
@@ -492,22 +480,22 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeseleccionarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:   
+        // TODO add your handling code here:
         
          //guardar el index de la fila seleccionada
-         int index = tlbDatos.getSelectedRow();
-         
+        int index = tlbDatos.getSelectedRow();
+        
          //restar counter de tareas
-         Counter_General[0]--;
-         
+        Counter_General[0]--;
+        
          //Limpiar Campos
-         Limpiar_Campos();
+        Limpiar_Campos();
         
         //Actualizar modelo de tabla
-         modelo = (DefaultTableModel) tlbDatos.getModel();
-         modelo.removeRow(index);
-         tlbDatos.setModel(modelo);
-         
+        modelo = (DefaultTableModel) tlbDatos.getModel();
+        modelo.removeRow(index);
+        tlbDatos.setModel(modelo);
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
@@ -551,7 +539,6 @@ public class principal extends javax.swing.JFrame {
     private javax.swing.JPanel PanelList;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnDeseleccionar;
-    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<String> cmbEstado;
     private javax.swing.JLabel jLabel1;
