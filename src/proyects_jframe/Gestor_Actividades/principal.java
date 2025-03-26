@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 public class principal extends javax.swing.JFrame {
     DefaultTableModel modelo ;
     public boolean Filaseleccionada ;
+    public int indexAnterior = -1 ;
 
 
     //*variable que guarda el conteo de las tareas agregadas
@@ -329,8 +330,8 @@ public class principal extends javax.swing.JFrame {
                 if(Filaseleccionada){
                     
                     //!se ejecuta cuando se selecciona una fila y la fila esta vacia
-                    Modo_Editar(true);
-
+                    Modo_Editar(true); //?activa el aspecto grafico al editar
+                    Comprobar_cambio_de_index();
                     Comprobar_fila_vacia();
 
                 }else{
@@ -360,27 +361,45 @@ public class principal extends javax.swing.JFrame {
     }
     
     private void Comprobar_fila_vacia(){
-        boolean fila_vacia;
-        int index = tlbDatos.getSelectedRow();
-        Object Nombre = tlbDatos.getValueAt(index,0);
-        fila_vacia = Nombre == null;
+        try {
+            boolean fila_vacia;
+            int index = tlbDatos.getSelectedRow();
+            Object Nombre = tlbDatos.getValueAt(index,0);
+            fila_vacia = Nombre == null;
 
-        if(fila_vacia){//?solo se ejecuta si la fila esta vacia
-            //! limpia los campos apaga el modo editar t termina la ejecuacion de la funcion
-            JOptionPane.showMessageDialog(null,"Error :No se puede editar una fila vacia");
-            Limpiar_Campos();
-            Modo_Editar(false);
-            return;
-        }else{
-            Editar_Campos(index);
+            if(fila_vacia){//?solo se ejecuta si la fila esta vacia
+                //! limpia los campos apaga el modo editar t termina la ejecuacion de la funcion
+                JOptionPane.showMessageDialog(null,"Error :No se puede editar una fila vacia");
+                Limpiar_Campos();
+                Modo_Editar(false);
+                return;
+            }else{
+                Editar_Campos(index);
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            JOptionPane.showMessageDialog(null,"Error al comprobar la fila"+e.getMessage());
         }
+        
+    }
+
+    public void Comprobar_cambio_de_index(){
+
+        int indexActual = tlbDatos.getSelectedRow();
+        //? Comprueba si en la fila esta seleccionada, con una variable publica
+
+        if(indexActual != indexAnterior){
+            Counter_General[1]=0;
+        }
+        indexAnterior = indexActual; //? Actualiza la variable publica
     }
     
     private void Editar_Campos(int index){
         
 
             //? se ejecuta solo si el counter de editar es 0
-            //! si es cero significa que no se a ejecutado y el counter esta limitado a 1 asi que solo se ejecuta una vez
+            //! si es cero significa que no se a ejecutado y el counter esta limitado a 1 por ende solo se ejecuta una vez
             if(Counter_General[1] == 0 ){
                 //? se encarga de rellenar los campos con los datos segun la lista
 
@@ -415,8 +434,8 @@ public class principal extends javax.swing.JFrame {
         //Limpiar Campos
         int N_tareas =Counter_General[0];
 
+        //? Limpia los campos Xd
         txtOrden.setText(String.valueOf(N_tareas));
-
         txtNombre.setText("");
         txtpDescripcion.setText("");
         cmbEstado.setSelectedIndex(0);
@@ -429,23 +448,21 @@ public class principal extends javax.swing.JFrame {
         //Obteniendo modelo de la tabla
         modelo = (DefaultTableModel) tlbDatos.getModel();
         //Acomodando  y ordenando variables
-        int index ;
 
-        if(Filaseleccionada){//*se ejecuta solo si una fila esta seleccionada
-            index =  tlbDatos.getValueAt(tlbDatos.getSelectedRow(), 0).hashCode();
-        }else{
-            index = Counter_General [0];
-        }
+        int index = Filaseleccionada ? //? Esto es un operador temario cumple la misma funcion de una sentencia if-else
+                    tlbDatos.getValueAt(tlbDatos.getSelectedRow(), 0).hashCode() : //! si la fila esta seleccionada
+                    Counter_General[0];//! si no lo esta
+
         
         String Estado = cmbEstado.getSelectedItem().toString();
-        String Nombre = txtNombre.getText();
+        String Nombre = txtNombre.getText().trim();
         String Descripcion = txtpDescripcion.getText();
         
         
         //Comprobar campos
         
         //*comprueba que los campos no esten vacios
-        if(!(Nombre.equals("") || Descripcion.equals(""))){
+        if(!(Nombre.isEmpty() || Descripcion.isEmpty())){
             
             //Llamar funcion
             Añadir_o_Reemplazar_datos(index,Estado,Nombre,Descripcion);
