@@ -65,7 +65,6 @@ public class principal extends javax.swing.JFrame {
         PanelGeneral = new javax.swing.JPanel();
         PanelDatos = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtOrden = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -77,6 +76,7 @@ public class principal extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
         btnDeseleccionar = new javax.swing.JButton();
+        txtOrden = new javax.swing.JLabel();
         PanelList = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tlbDatos = new javax.swing.JTable();
@@ -88,10 +88,6 @@ public class principal extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Control de Actividades");
         jLabel1.setToolTipText("");
-
-        txtOrden.setEditable(false);
-        txtOrden.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtOrden.setText("0");
 
         jLabel2.setText("N°Orden");
 
@@ -134,40 +130,15 @@ public class principal extends javax.swing.JFrame {
             }
         });
 
+        txtOrden.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        txtOrden.setText("0");
+
         javax.swing.GroupLayout PanelDatosLayout = new javax.swing.GroupLayout(PanelDatos);
         PanelDatos.setLayout(PanelDatosLayout);
         PanelDatosLayout.setHorizontalGroup(
             PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelDatosLayout.createSequentialGroup()
                 .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
-                        .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelDatosLayout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))
-                            .addGroup(PanelDatosLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)))
-                        .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(33, 33, 33)))
-                        .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(61, 61, 61)))
-                        .addGap(9, 9, 9))
-                    .addGroup(PanelDatosLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(PanelDatosLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(PanelDatosLayout.createSequentialGroup()
                         .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelDatosLayout.createSequentialGroup()
@@ -180,7 +151,32 @@ public class principal extends javax.swing.JFrame {
                                 .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnDeseleccionar)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(PanelDatosLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
+                                .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addGroup(PanelDatosLayout.createSequentialGroup()
+                                        .addGap(16, 16, 16)
+                                        .addComponent(txtOrden)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                                .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(33, 33, 33)))
+                                .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDatosLayout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(61, 61, 61)))
+                                .addGap(9, 9, 9))
+                            .addComponent(jScrollPane1)
+                            .addGroup(PanelDatosLayout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         PanelDatosLayout.setVerticalGroup(
@@ -194,15 +190,16 @@ public class principal extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtOrden))
+                .addGap(32, 32, 32)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -229,6 +226,7 @@ public class principal extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        tlbDatos.setFocusable(false);
         jScrollPane3.setViewportView(tlbDatos);
         if (tlbDatos.getColumnModel().getColumnCount() > 0) {
             tlbDatos.getColumnModel().getColumn(0).setMinWidth(50);
@@ -255,7 +253,7 @@ public class principal extends javax.swing.JFrame {
             PanelListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelListLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -307,8 +305,9 @@ public class principal extends javax.swing.JFrame {
     
     private void Añadir_o_Reemplazar_datos(int index,String Estado,String Nombre,String Descripcion){
         //fila vacia
-        modelo.addRow(new Object[4]);
-        
+        if(!Filaseleccionada){
+            modelo.addRow(new Object[4]);
+        }
         //Introduciendo Datos
         modelo.setValueAt(index, index, 0);
         modelo.setValueAt(Estado, index, 1);
@@ -325,7 +324,7 @@ public class principal extends javax.swing.JFrame {
         Timer reloj = new Timer(20 , new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                Filaseleccionada = tlbDatos.getSelectedRow() != -1; //? comparacion si indica si haz seleccionado una fila o no
+                Filaseleccionada = tlbDatos.getSelectedRow() != -1; //? comparacion si indica si se a seleccionado una fila o no
                 
                 if(Filaseleccionada){
                     
@@ -566,7 +565,7 @@ public class principal extends javax.swing.JFrame {
     private javax.swing.JPanel panelbar;
     private javax.swing.JTable tlbDatos;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtOrden;
+    private javax.swing.JLabel txtOrden;
     private javax.swing.JTextArea txtpDescripcion;
     // End of variables declaration//GEN-END:variables
 }
