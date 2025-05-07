@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 
 import javax.swing.Timer;
 
@@ -21,6 +23,7 @@ tareas:
     -extraer la hora del ordenador
     -crear unos campos usando el spinner ,para indicar cuanto tiempo desde la hora actual va a sonar la alarma
     -introducir un label arriba de los spiners ,este se atualizara una vez de hay se modificara segun los datos de lso spinners
+    -Guardar los datos de las alarmas en una base sql
     -usar una libreria para reproducir un sonido cuando la hora llegue
     .Crearuna funcion que reinicie todo
 
@@ -31,13 +34,21 @@ tareas:
  * @author Iberos-HP
  */
 public class Principal2 extends javax.swing.JFrame {
+        public boolean Campos_llenos= false;
 
+        ArrayList baseDatos = new ArrayList();
+        
+        DefaultListModel model = new DefaultListModel();
     /**
      * Creates new form Principal2
      */
     public Principal2() {
         initComponents();
-        ActualizarHora();
+        
+        model = new DefaultListModel();
+        listAlarmas.setModel(model);
+        InicializarLista();
+        TimerUpdate();
     }
 
     /**
@@ -55,9 +66,14 @@ public class Principal2 extends javax.swing.JFrame {
         lbTiempoRestante = new javax.swing.JLabel();
         Alarmas = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listAlarmas = new javax.swing.JList<>();
         Botones = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        spHora = new javax.swing.JSpinner();
+        spMinutos = new javax.swing.JSpinner();
+        txtHora = new javax.swing.JLabel();
+        btnAgregarAlarma = new javax.swing.JButton();
+        txtMinutos1 = new javax.swing.JLabel();
+        cmbPeriodo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,14 +116,9 @@ public class Principal2 extends javax.swing.JFrame {
                 .addContainerGap(86, Short.MAX_VALUE))
         );
 
-        jList1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        jList1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "1.Hola", "2.GEY" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList1);
+        listAlarmas.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        listAlarmas.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jScrollPane2.setViewportView(listAlarmas);
 
         javax.swing.GroupLayout AlarmasLayout = new javax.swing.GroupLayout(Alarmas);
         Alarmas.setLayout(AlarmasLayout);
@@ -120,26 +131,61 @@ public class Principal2 extends javax.swing.JFrame {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
         );
 
-        jButton1.setText("Agregar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        txtHora.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        txtHora.setText("Hora");
+
+        btnAgregarAlarma.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAgregarAlarma.setText("Agregar Alarma");
+        btnAgregarAlarma.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAgregarAlarmaActionPerformed(evt);
             }
         });
+
+        txtMinutos1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        txtMinutos1.setText("Minutos");
+
+        cmbPeriodo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM" }));
 
         javax.swing.GroupLayout BotonesLayout = new javax.swing.GroupLayout(Botones);
         Botones.setLayout(BotonesLayout);
         BotonesLayout.setHorizontalGroup(
             BotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BotonesLayout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addGap(0, 184, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(txtHora)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtMinutos1)
+                .addGap(94, 94, 94))
+            .addGroup(BotonesLayout.createSequentialGroup()
+                .addGroup(BotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(BotonesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(spHora, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(spMinutos, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(BotonesLayout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(btnAgregarAlarma, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         BotonesLayout.setVerticalGroup(
             BotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BotonesLayout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(BotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtHora)
+                    .addComponent(txtMinutos1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(BotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(spHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spMinutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAgregarAlarma)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -165,23 +211,80 @@ public class Principal2 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnAgregarAlarmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAlarmaActionPerformed
         // TODO add your handling code here:
+        
+        int Hora,Minutos;
+        String periodo;
+        
+        Hora= spHora.getValue().hashCode();
+        Minutos = spMinutos.getValue().hashCode();
+        periodo = cmbPeriodo.getSelectedItem().toString();
+        
+        
+        
+        
+        
+        resetCampos();
+    }//GEN-LAST:event_btnAgregarAlarmaActionPerformed
 
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-        public void ActualizarHora(){
-        Timer reloj = new Timer(10 , new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-
-                // Obtener la hora actual
+    public void Esconderbotones(boolean estado){
+       btnAgregarAlarma.setVisible(estado);
+       cmbPeriodo.setVisible(estado);
+    }
+    
+    private void Correcciones(int hora , int minutos){
+       
+        if(hora == -1){
+            spHora.setValue(0);
+        } 
+        if(minutos == -1){
+            spMinutos.setValue(0);
+        }
+    }
+    
+    public void InicializarLista(){
+        
+    }
+    
+    private void EstablecerHoraPrincipal(){
+        // Obtener la hora actual
                 LocalTime horaActual = LocalTime.now();
                 // Formatear la hora como una cadena
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("hh:mm a");
                 String HoraActual = horaActual.format(formato);
                 // Actualizar el label con la hora actual
                 lbHoraOrdenador.setText(HoraActual);
+    }
+    
+    private void CompararCamposllenos(){
+        int Hora = spHora.getValue().hashCode();
+        int Minutos = spMinutos.getValue().hashCode();
+        
+        if( Hora != 0 && Minutos != 0){
+            Campos_llenos = true;
+        }else{
+            Campos_llenos = false;
+        }
+        
+        Correcciones(Hora,Minutos);
+    }
+    
+    private void resetCampos(){
+        spHora.setValue(0);
+        spMinutos.setValue(0);
+        cmbPeriodo.setSelectedIndex(0);
+    }
+    
+    public void TimerUpdate(){
+    Timer reloj = new Timer(10 , new ActionListener(){
+        @Override
+        public void actionPerformed(ActionEvent e){
+            Esconderbotones(Campos_llenos);
+            EstablecerHoraPrincipal();
+            CompararCamposllenos();
+
+
             }
 
         });
@@ -226,11 +329,16 @@ public class Principal2 extends javax.swing.JFrame {
     private javax.swing.JPanel Alarmas;
     private javax.swing.JPanel Botones;
     private javax.swing.JPanel Principal;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JButton btnAgregarAlarma;
+    private javax.swing.JComboBox<String> cmbPeriodo;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbAlarma;
     private javax.swing.JLabel lbHoraOrdenador;
     private javax.swing.JLabel lbTiempoRestante;
+    private javax.swing.JList<String> listAlarmas;
+    private javax.swing.JSpinner spHora;
+    private javax.swing.JSpinner spMinutos;
+    private javax.swing.JLabel txtHora;
+    private javax.swing.JLabel txtMinutos1;
     // End of variables declaration//GEN-END:variables
 }
