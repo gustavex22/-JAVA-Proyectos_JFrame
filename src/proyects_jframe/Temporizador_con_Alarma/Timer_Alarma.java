@@ -13,19 +13,19 @@ import javax.swing.DefaultListModel;
 import javax.swing.Timer;
 
 /*
- como funciona?
--tomara la hora del ordenador plasmandola en la interfaz creada
--luego habilitara una opciones que permitan elegir cuando sonara la alarma
--se habilitara el boton iniciar y se desabilitaran las opciones para que empieze a cronometrar el tiempo
+ ?como funciona?
+*-tomara la hora del ordenador plasmandola en la interfaz creada
+*-luego habilitara una opciones que permitan elegir cuando sonara la alarma
+*-se habilitara el boton iniciar y se desabilitaran las opciones para que empieze a cronometrar el tiempo
 
 
-tareas:
-    -extraer la hora del ordenador
-    -crear unos campos usando el spinner ,para indicar cuanto tiempo desde la hora actual va a sonar la alarma
-    -introducir un label arriba de los spiners ,este se atualizara una vez de hay se modificara segun los datos de lso spinners
-    -Guardar los datos de las alarmas en una base sql
-    -usar una libreria para reproducir un sonido cuando la hora llegue
-    .Crearuna funcion que reinicie todo
+?tareas:
+    *-extraer la hora del ordenador(listo)
+    *-crear unos campos usando el spinner ,para indicar cuanto tiempo desde la hora actual va a sonar la alarma
+    *-introducir un label arriba de los spiners ,este se atualizara una vez de hay se modificara segun los datos de lso spinners
+    *-Guardar los datos de las alarmas en una base sql
+    *-usar una libreria para reproducir un sonido cuando la hora llegue
+    *.Crear una funcion que reinicie todo
 
 */
 
@@ -33,18 +33,14 @@ tareas:
  *
  * @author Iberos-HP
  */
-public class Principal2 extends javax.swing.JFrame {
+public class Timer_Alarma extends javax.swing.JFrame {
         public boolean Campos_llenos= false;
-
-        ArrayList baseDatos = new ArrayList();
-        
         DefaultListModel model = new DefaultListModel();
     /**
      * Creates new form Principal2
      */
-    public Principal2() {
+    public Timer_Alarma() {
         initComponents();
-        
         model = new DefaultListModel();
         listAlarmas.setModel(model);
         InicializarLista();
@@ -228,7 +224,7 @@ public class Principal2 extends javax.swing.JFrame {
         resetCampos();
     }//GEN-LAST:event_btnAgregarAlarmaActionPerformed
 
-    public void Esconderbotones(boolean estado){
+    public void Esconder_botones(boolean estado){
        btnAgregarAlarma.setVisible(estado);
        cmbPeriodo.setVisible(estado);
     }
@@ -280,7 +276,7 @@ public class Principal2 extends javax.swing.JFrame {
     Timer reloj = new Timer(10 , new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e){
-            Esconderbotones(Campos_llenos);
+            Esconder_botones(Campos_llenos);
             EstablecerHoraPrincipal();
             CompararCamposllenos();
 
@@ -307,20 +303,20 @@ public class Principal2 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Timer_Alarma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Timer_Alarma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Timer_Alarma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Timer_Alarma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal2().setVisible(true);
+                new Timer_Alarma().setVisible(true);
             }
         });
     }
