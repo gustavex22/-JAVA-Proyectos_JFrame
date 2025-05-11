@@ -47,10 +47,9 @@ public class principal extends javax.swing.JFrame {
         setResizable(false);
         setTitle("Gestor de Actividades");
         
-        
-        //Timer se ejecuta cada 20 ms (0,20 segundo)
-        Timer_Ejecucion();
 
+        //!Timer se ejecuta cada 20 ms (0,20 segundo)
+        Timer_Ejecucion();
     }
 
     /**

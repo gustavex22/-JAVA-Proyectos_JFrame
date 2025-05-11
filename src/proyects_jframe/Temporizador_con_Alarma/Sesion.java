@@ -11,12 +11,13 @@ package proyects_jframe.Temporizador_con_Alarma;
 public class Sesion extends javax.swing.JFrame {
     public String user ;
     public String contra;
-
+   public boolean continuar;
     /**
      * Creates new form Sesion
      */
     public Sesion() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     public String getUser() {
@@ -35,6 +36,9 @@ public class Sesion extends javax.swing.JFrame {
         this.contra = contra;
     }
 
+    public boolean estado(){
+        return continuar;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -116,15 +120,16 @@ public class Sesion extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
         setUser(txtUser.getText());
         setContra(txtContraseña.getText());
+       
         
         txtUser.setText("");
         txtContraseña.setText("");
-        
+        continuar = true;
         this.dispose();
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 

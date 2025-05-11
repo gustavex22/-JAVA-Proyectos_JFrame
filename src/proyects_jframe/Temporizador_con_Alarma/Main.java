@@ -4,6 +4,8 @@
  */
 package proyects_jframe.Temporizador_con_Alarma;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Iberos-HP
@@ -14,15 +16,20 @@ public class Main {
          public static Conexion_SQL conexionsql = new Conexion_SQL();
     
     public static void main(String[] args){
+        boolean continuar= false;
         //inicia el login
          login.setVisible(true);
-         
          String usuario =login.getUser();
          String contraseña = login.getContra();
          
-         //? Inicia sesion en SQL SERVER
-         conexionsql.SQL(usuario, contraseña);
          
+         while(continuar){
+            continuar = login.estado();
+            JOptionPane.showMessageDialog(null,"Implementado con exito");
+            //? Inicia sesion en SQL SERVER
+            conexionsql.SQL(usuario, contraseña);
+         }
+            
          
          
          
