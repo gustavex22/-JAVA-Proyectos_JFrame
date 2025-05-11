@@ -217,7 +217,7 @@ public class Timer_Alarma extends javax.swing.JFrame {
         Minutos = spMinutos.getValue().hashCode();
         periodo = cmbPeriodo.getSelectedItem().toString();
         
-        
+        //? Codigo para agregar Campos a  la lista
         
         
         
@@ -240,10 +240,19 @@ public class Timer_Alarma extends javax.swing.JFrame {
     }
     
     public void InicializarLista(){
+        //? se cargara los datos de la base de datos sql al Jlist
         
+        //! se ejecuta apenas inicia el formulario
+    }
+    
+    public void GuardarLista(){
+        //?se cargaran los datos del Jlist reemplazando lso datos de la base de datos SQL
+    
+        //! se ejecuta al terminar de cerrar el programa
     }
     
     private void EstablecerHoraPrincipal(){
+        
         // Obtener la hora actual
                 LocalTime horaActual = LocalTime.now();
                 // Formatear la hora como una cadena
@@ -253,10 +262,12 @@ public class Timer_Alarma extends javax.swing.JFrame {
                 lbHoraOrdenador.setText(HoraActual);
     }
     
+    
     private void CompararCamposllenos(){
         int Hora = spHora.getValue().hashCode();
         int Minutos = spMinutos.getValue().hashCode();
         
+        //? Simple sentencia If para indicar que cada campo este lleno
         if( Hora != 0 && Minutos != 0){
             Campos_llenos = true;
         }else{
